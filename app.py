@@ -20,11 +20,6 @@ def index():
         username = registration_form.username.data
         password = registration_form.password.data
 
-        user = User.query.filter_by(username=username).first()
-
-        if user:
-            return 'This username is already being used.'
-
         user = User(username=username, password=password)
 
         db.session.add(user)
