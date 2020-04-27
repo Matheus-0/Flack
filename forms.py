@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from passlib.hash import pbkdf2_sha256
 from wtforms import PasswordField, StringField, SubmitField
 from wtforms.validators import EqualTo, InputRequired, Length, ValidationError
 
@@ -37,7 +38,7 @@ def invalid_credentials(form, field):
 
     user = User.query.filter_by(username=username).first()
 
-    if user is None or password != user.password:
+    if user is None or not pbkdf2_sha256.verify(password, user.password):
         raise ValidationError("Username or password is incorrect.")
 
 

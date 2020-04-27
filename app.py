@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template, url_for
+from passlib.hash import pbkdf2_sha256
 
 from forms import *
 from models import *
@@ -20,7 +21,9 @@ def index():
         username = registration_form.username.data
         password = registration_form.password.data
 
-        user = User(username=username, password=password)
+        hashed_password = pbkdf2_sha256.hash(password)
+
+        user = User(username=username, password=hashed_password)
 
         db.session.add(user)
         db.session.commit()
@@ -35,9 +38,6 @@ def login():
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
-        username = login_form.username.data
-        password = login_form.password.data
-
         return 'Logged in!'
 
     return render_template('login.html', form=login_form)
