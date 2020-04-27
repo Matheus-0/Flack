@@ -1,0 +1,23 @@
+{% extends 'auth.html' %}
+
+{% from 'helper.html' import display %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block body %}
+    <h2>Log In Now!</h2>
+    <p>Enter your username and password to start using Flack!</p>
+
+    <form action="{{ url_for('login') }}" method="post">
+    {{ display(form.username, 'Username', autocomplete="off", autofocus=true) }}
+    {{ display(form.password, 'Password') }}
+
+    <div>
+        {{ form.submit }}
+    </div>
+
+    {{ form.csrf_token }}
+    </form>
+{% endblock %}

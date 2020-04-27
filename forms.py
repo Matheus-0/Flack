@@ -31,13 +31,24 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Username already exists.')
 
 
+def invalid_credentials(form, field):
+    username = form.username.data
+    password = field.data
+
+    user = User.query.filter_by(username=username).first()
+
+    if user is None or password != user.password:
+        raise ValidationError("Username or password is incorrect.")
+
+
 class LoginForm(FlaskForm):
     username = StringField('username', [
-        InputRequired('Username is required.')
+        InputRequired('Username is required.'),
     ])
 
-    password = StringField('password', [
-        InputRequired('Password is required.')
+    password = PasswordField('password', [
+        InputRequired('Password is required.'),
+        invalid_credentials
     ])
 
     submit = SubmitField('Log In')
