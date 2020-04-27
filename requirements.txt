@@ -1,6 +1,7 @@
 Flask
 Flask-Login
 Flask-SQLAlchemy
+Flask-SocketIO
 Flask-WTF
 passlib
 psycopg2
