@@ -1,16 +1,27 @@
 from flask import Flask, redirect, render_template, url_for
-from passlib.hash import pbkdf2_sha256
+from flask_login import current_user, LoginManager, login_user, logout_user
 
 from forms import *
 from models import *
 
+# Setting up app
 app = Flask(__name__)
 
 app.secret_key = 'dev'
 
+# Setting up database
 app.config['SQLALCHEMY_DATABASE_URI'] = None
 
 db = SQLAlchemy(app)
+
+# Setting up Flask's login
+login = LoginManager(app)
+login.init_app(app)
+
+
+@login.user_loader
+def load_user(id_):
+    return User.query.get(int(id_))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,7 +34,7 @@ def index():
 
         hashed_password = pbkdf2_sha256.hash(password)
 
-        user = User(username=username, password=hashed_password)
+        user = User(username, hashed_password)
 
         db.session.add(user)
         db.session.commit()
@@ -33,14 +44,33 @@ def index():
     return render_template('index.html', form=registration_form)
 
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
-        return 'Logged in!'
+        user = User.query.filter_by(username=login_form.username.data).first()
+
+        login_user(user)
+
+        return redirect(url_for('chat'))
 
     return render_template('login.html', form=login_form)
+
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+
+    return "Chat."
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
