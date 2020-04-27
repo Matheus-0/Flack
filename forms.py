@@ -29,3 +29,15 @@ class RegistrationForm(FlaskForm):
 
         if user:
             raise ValidationError('Username already exists.')
+
+
+class LoginForm(FlaskForm):
+    username = StringField('username', [
+        InputRequired('Username is required.')
+    ])
+
+    password = StringField('password', [
+        InputRequired('Password is required.')
+    ])
+
+    submit = SubmitField('Log In')
