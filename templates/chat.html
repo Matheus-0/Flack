@@ -2,48 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title -->
     <title>Chat</title>
+
+    <!-- Username -->
+    <script type="text/javascript">
+        const username = `{{ username }}`;
+    </script>
+
+    <!-- SocketIO -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- Local styling -->
+    <link href="{{ url_for('static', filename='css/chat.css') }}" rel="stylesheet">
+
+    <!-- Local scripts -->
+    <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </head>
+
 <body>
-<!-- Navigation -->
-<nav></nav>
+<nav class="navbar justify-content-center">
+    <h1 class="header-text">Flack</h1>
+</nav>
 
-<div id="main-section">
-    <!-- Rooms -->
-    <nav id="sidebar">
-        <h4>Rooms</h4>
+<div id="main-section" class="container">
+    <div class="row">
+        <!-- Rooms -->
+        <div id="sidebar" class="col-3 text-center border-right">
+            <h5>Rooms</h5>
 
-        {% for room in rooms %}
-            <p class="select-room">{{ room|lower }}</p>
-        {% endfor %}
-    </nav>
+            {% for room in rooms %}
+                <p class="select-room">{{ room|lower }}</p>
+            {% endfor %}
+        </div>
 
-    <!-- Messages -->
-    <div id="right-panel">
-        <!-- Display -->
-        <div id="display-message-section"></div>
+        <!-- Messages -->
+        <div id="right-panel" class="col-9">
+            <!-- Display -->
+            <div id="display-message-section"></div>
 
-        <!-- Input -->
-        <div id="input-area">
-            <label for="user-message"></label>
-            <input type="text" id="user-message" placeholder="Type your message here..." autocomplete="off">
-            <button type="button" id="send-message">Send</button>
+            <!-- Input -->
+            <div id="input-area" class="input-group">
+                <label for="user-message"></label>
+                <input type="text" id="user-message" class="rounded rounded-pill border-0 btn-outline-dark bg-dark form-control mr-2" placeholder="Type your message here..." autocomplete="off">
+                <button type="button" class="rounded-pill btn btn-dark" id="send-message">
+                    <svg class="bi bi-cursor-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M14.082 2.182a.5.5 0 01.103.557L8.528 15.467a.5.5 0 01-.917-.007L5.57 10.694.803 8.652a.5.5 0 01-.006-.916l12.728-5.657a.5.5 0 01.556.103z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
-<!-- Username -->
-<script type="text/javascript">
-    const username = `{{ username }}`;
-</script>
-
-<!-- SocketIO -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
-        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
-        crossorigin="anonymous"></script>
-
-<!-- Local scripts -->
-<script src="{{ url_for('static', filename='js/socket.js') }}"></script>
-<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
