@@ -1,6 +1,8 @@
+from time import localtime, strftime
+
 from flask import flash, Flask, redirect, render_template, url_for
 from flask_login import current_user, LoginManager, login_user, logout_user
-from flask_socketio import SocketIO
+from flask_socketio import join_room, leave_room, SocketIO
 
 from forms import *
 from models import *
@@ -17,6 +19,9 @@ db = SQLAlchemy(app)
 
 # Setting up Flask's SocketIO
 socket = SocketIO(app)
+
+# Rooms
+rooms = ['lounge', 'news', 'games', 'coding']
 
 # Setting up Flask's login
 login = LoginManager(app)
@@ -77,7 +82,7 @@ def chat():
 
         return redirect(url_for('login'))
 
-    return render_template('chat.html')
+    return render_template('chat.html', username=current_user.username, rooms=rooms)
 
 
 # Logout route
@@ -93,7 +98,31 @@ def logout():
 # Message event
 @socket.on('message')
 def message(data):
-    socket.send(data)
+    socket.send({
+        'message': data['message'],
+        'username': data['username'],
+        'timestamp': strftime('%b %d %I:%M%p', localtime())
+    }, room=data['room'])
+
+
+# Join room
+@socket.on('join')
+def join(data):
+    join_room(data['room'])
+
+    socket.send({
+        'message': data['username'] + ' has joined the ' + data['room'] + ' room.'
+    }, room=data['room'])
+
+
+# Leave room
+@socket.on('leave')
+def leave(data):
+    leave_room(data['room'])
+
+    socket.send({
+        'message': data['username'] + ' has left the ' + data['room'] + ' room.'
+    }, room=data['room'])
 
 
 # Run SocketIO app
