@@ -34,9 +34,20 @@ def load_user(id_):
     return User.query.get(int(id_))
 
 
-# Register route (change later)
+# Chat route
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if not current_user.is_authenticated:
+        flash('You need to log in to access this page.', 'danger')
+
+        return redirect(url_for('login'))
+
+    return render_template('index.html', username=current_user.username, rooms=rooms)
+
+
+# Register route (change later)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
     registration_form = RegistrationForm()
 
     # If method was POST
@@ -55,7 +66,7 @@ def index():
 
         return redirect(url_for('login'))
 
-    return render_template('index.html', form=registration_form)
+    return render_template('register.html', form=registration_form)
 
 
 # Login route
@@ -69,20 +80,9 @@ def login():
 
         login_user(user)
 
-        return redirect(url_for('chat'))
+        return redirect(url_for('index'))
 
     return render_template('login.html', form=login_form)
-
-
-# Chat route
-@app.route('/chat', methods=['GET', 'POST'])
-def chat():
-    if not current_user.is_authenticated:
-        flash('You need to log in to access this page.', 'danger')
-
-        return redirect(url_for('login'))
-
-    return render_template('chat.html', username=current_user.username, rooms=rooms)
 
 
 # Logout route

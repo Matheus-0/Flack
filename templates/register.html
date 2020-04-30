@@ -1,0 +1,17 @@
+{% extends "auth.html" %}
+
+{% block foo %}
+    Create an account!
+{% endblock %}
+
+{% block action %}
+    {{ url_for('register') }}
+{% endblock %}
+
+{% block confirm %}
+    {{ display(form.confirm, 'Confirm password') }}
+{% endblock %}
+
+{% block bottom %}
+    <a href="{{ url_for('login') }}">Already have an account?</a>
+{% endblock %}

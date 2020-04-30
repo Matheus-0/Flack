@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Tamma+2&display=swap");
+body {
+  background: #191919;
+  background: -moz-linear-gradient(90deg, #191919 0%, #141414 50%, #0a0a0a 100%);
+  background: -webkit-linear-gradient(90deg, #191919 0%, #141414 50%, #0a0a0a 100%);
+  background: linear-gradient(90deg, #191919 0%, #141414 50%, #0a0a0a 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#191919",endColorstr="#0a0a0a",GradientType=1);
+  font-family: "Baloo Tamma 2", cursive;
+}
+
+.header-text {
+  color: royalblue;
+  font-weight: lighter;
+}
+
+/*# sourceMappingURL=body.css.map */

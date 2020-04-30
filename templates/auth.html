@@ -1,22 +1,62 @@
+{% from 'helper.html' import display %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        {% block title %}
-        {% endblock %}
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title -->
+    <title>Flack</title>
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Local styling -->
+    <link href="{{ url_for('static', filename='css/body.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/auth.css') }}" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar justify-content-center">
+    <h1 class="header-text">Flack</h1>
+</nav>
 
 {% with messages = get_flashed_messages(True) %}
     {% if messages %}
-        Category: {{ messages[0][0] }}
-        {{ messages[0][1] }}
+        {% if messages[0][0] == 'danger' %}
+            <div class="container alert alert-danger w-25">{{ messages[0][1] }}</div>
+        {% elif messages[0][0] == 'success' %}
+            <div class="container alert alert-success w-25">{{ messages[0][1] }}</div>
+        {% endif %}
     {% endif %}
 {% endwith %}
 
-{% block body %}
-{% endblock %}
+<div class="container w-25 text-center auth-form shadow border border-dark">
+    <h2>
+        {% block foo %}
+        {% endblock %}
+    </h2>
+    <p>Enter your username and password to start using Flack!</p>
+
+    <form method="post" action="{% block action %}{% endblock %}">
+
+    {{ display(form.username, 'Username', autocomplete="off", autofocus=true) }}
+    {{ display(form.password, 'Password') }}
+
+    {% block confirm %}
+    {% endblock %}
+
+    <div class="mb-3">
+        {{ form.submit(class="btn text-light background-blue") }}
+    </div>
+
+    <p>
+        {% block bottom %}
+        {% endblock %}
+    </p>
+
+    {{ form.csrf_token }}
+    </form>
+</div>
 </body>
 </html>
