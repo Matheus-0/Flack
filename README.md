@@ -1,5 +1,5 @@
 # Flack
-A web chat app made in Python and JavaScript.
+A simple web chat app made in Python and JavaScript.
 
 ### Language(s)
 * CSS
