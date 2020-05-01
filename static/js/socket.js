@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.username) {
             span.innerHTML = data.username;
             timestamp.innerHTML = data.timestamp;
+
+            timestamp.style.fontSize = 'small';
+
             paragraph.innerHTML = span.outerHTML + line.outerHTML + data.message + line.outerHTML + timestamp.outerHTML;
 
             document.querySelector('#display-message-section').append(paragraph);

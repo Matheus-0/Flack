@@ -33,14 +33,14 @@
 
 <body>
 <nav class="navbar justify-content-center">
-    <h1 class="header-text">Flack</h1>
+    <h1 class="header-text mt-2 mb-2">Flack</h1>
 </nav>
 
 <div id="main-section" class="container">
     <div class="row">
         <!-- Rooms -->
         <div id="sidebar" class="col-3 text-center border-right">
-            <h5>Rooms</h5>
+            <h5 class="border-bottom">Rooms</h5>
 
             {% for room in rooms %}
                 <p class="select-room">{{ room|lower }}</p>

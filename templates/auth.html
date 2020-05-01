@@ -18,15 +18,15 @@
 </head>
 <body>
 <nav class="navbar justify-content-center">
-    <h1 class="header-text">Flack</h1>
+    <h1 class="header-text mt-2 mb-2">Flack</h1>
 </nav>
 
 {% with messages = get_flashed_messages(True) %}
     {% if messages %}
         {% if messages[0][0] == 'danger' %}
-            <div class="container alert alert-danger w-25">{{ messages[0][1] }}</div>
+            <div class="container alert alert-danger w-25 text-center">{{ messages[0][1] }}</div>
         {% elif messages[0][0] == 'success' %}
-            <div class="container alert alert-success w-25">{{ messages[0][1] }}</div>
+            <div class="container alert alert-success w-25 text-center">{{ messages[0][1] }}</div>
         {% endif %}
     {% endif %}
 {% endwith %}

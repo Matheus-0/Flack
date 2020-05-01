@@ -12,8 +12,9 @@ app = Flask(__name__)
 
 app.secret_key = 'dev'
 
-# Setting up database
+# Setting up app and database
 app.config['SQLALCHEMY_DATABASE_URI'] = None
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -45,7 +46,7 @@ def index():
     return render_template('index.html', username=current_user.username, rooms=rooms)
 
 
-# Register route (change later)
+# Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     registration_form = RegistrationForm()
@@ -98,11 +99,12 @@ def logout():
 # Message event
 @socket.on('message')
 def message(data):
-    socket.send({
-        'message': data['message'],
-        'username': data['username'],
-        'timestamp': strftime('%b %d %I:%M%p', localtime())
-    }, room=data['room'])
+    if data['message'].strip():
+        socket.send({
+            'message': data['message'],
+            'username': data['username'],
+            'timestamp': strftime('%b %d %I:%M%p', localtime())
+        }, room=data['room'])
 
 
 # Join room
