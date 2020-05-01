@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 socket = SocketIO(app)
 
 # Rooms
-rooms = ['lounge', 'news', 'games', 'coding']
+rooms = ['general', 'news', 'games', 'coding']
 
 # Setting up Flask's login
 login = LoginManager(app)

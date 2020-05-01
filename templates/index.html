@@ -33,9 +33,13 @@
         <div id="sidebar" class="col-3 text-center border-right">
             <h5 class="border-bottom">Rooms</h5>
 
-            {% for room in rooms %}
-                <p class="select-room">{{ room|lower }}</p>
-            {% endfor %}
+            <div id="rooms">
+                {% for room in rooms %}
+                    <p class="select-room">{{ room|lower }}</p>
+                {% endfor %}
+            </div>
+
+            <a id="logout" href="{{ url_for('logout') }}">Log Out</a>
         </div>
 
         <div id="right-panel" class="col-9">
