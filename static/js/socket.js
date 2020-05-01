@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else {
             printSystemMessage(data.message);
         }
+
+        updateScrollToBottom();
     });
 
     // Send message
@@ -56,6 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
+    // Update scroll to bottom
+    function updateScrollToBottom() {
+        const element = document.querySelector('#display-message-section');
+
+        element.scrollTop = element.scrollHeight;
+    }
+
     // Leave room
     function leaveRoom(room) {
         socket.emit('leave', {
@@ -85,5 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paragraph.innerHTML = message;
 
         document.querySelector('#display-message-section').append(paragraph);
+
+        updateScrollToBottom();
     }
 });
