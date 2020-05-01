@@ -1,5 +1,5 @@
 #display-message-section::-webkit-scrollbar, #rooms::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 #display-message-section::-webkit-scrollbar-thumb, #rooms::-webkit-scrollbar-thumb {
