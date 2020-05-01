@@ -7,20 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Display messages
     socket.on('message', data => {
-        const paragraph = document.createElement('p');
-        const span = document.createElement('span');
-        const timestamp = document.createElement('span');
-        const line = document.createElement('br');
-
-        if (data.username) {
-            span.innerHTML = data.username;
-            timestamp.innerHTML = data.timestamp;
-
-            timestamp.style.fontSize = 'small';
-
-            paragraph.innerHTML = span.outerHTML + line.outerHTML + data.message + line.outerHTML + timestamp.outerHTML;
-
-            document.querySelector('#display-message-section').append(paragraph);
+        if (data.messages) {
+            data.messages.forEach(message => {
+                appendMessage(message);
+            })
         }
         else {
             printSystemMessage(data.message);
@@ -57,6 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     });
+
+    // Append message
+    function appendMessage(context) {
+        const paragraph = document.createElement('p');
+        const span = document.createElement('span');
+        const timestamp = document.createElement('span');
+        const line = document.createElement('br');
+
+        span.innerHTML = context.username;
+        timestamp.innerHTML = context.timestamp;
+
+        timestamp.style.fontSize = 'small';
+
+        paragraph.innerHTML = span.outerHTML + line.outerHTML + context.message + line.outerHTML + timestamp.outerHTML;
+
+        document.querySelector('#display-message-section').append(paragraph);
+    }
 
     // Update scroll to bottom
     function updateScrollToBottom() {

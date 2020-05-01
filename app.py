@@ -1,6 +1,6 @@
 from time import localtime, strftime
 
-from flask import flash, Flask, redirect, render_template, url_for
+from flask import flash, Flask, redirect, request, render_template, url_for
 from flask_login import current_user, LoginManager, login_user, logout_user
 from flask_socketio import join_room, leave_room, SocketIO
 
@@ -24,6 +24,12 @@ socket = SocketIO(app)
 # Rooms
 rooms = ['general', 'news', 'games', 'coding', 'lounge', 'shows', 'anime', 'movies', 'music', 'tech', 'debug',
          'conspiracy']
+
+# Messages of each room
+messages = dict()
+
+# Limit of stored messages for each room
+limit = 100
 
 # Setting up Flask's login
 login = LoginManager(app)
@@ -101,10 +107,16 @@ def logout():
 @socket.on('message')
 def message(data):
     if data['message'].strip():
-        socket.send({
+        context = {
             'message': data['message'],
             'username': data['username'],
             'timestamp': strftime('%b %d %I:%M%p', localtime())
+        }
+
+        add(context, data['room'])
+
+        socket.send({
+            'messages': [context]
         }, room=data['room'])
 
 
@@ -113,9 +125,20 @@ def message(data):
 def join(data):
     join_room(data['room'])
 
+    try:
+        join_room(request.sid)
+
+        socket.send({
+            'messages': messages[data['room']]
+        }, room=request.sid)
+    except KeyError:
+        pass
+
     socket.send({
-        'message': data['username'] + ' has joined the ' + data['room'] + ' room.'
+        'message': data['username'] + ' has joined the ' + data['room'] + ' room.',
     }, room=data['room'])
+
+    join_room(data['room'])
 
 
 # Leave room
@@ -126,6 +149,17 @@ def leave(data):
     socket.send({
         'message': data['username'] + ' has left the ' + data['room'] + ' room.'
     }, room=data['room'])
+
+
+# Add message to server
+def add(context, room):
+    try:
+        messages[room].append(context)
+    except KeyError:
+        messages[room] = [context]
+
+    if len(messages) == limit + 1:
+        messages[room].pop(0)
 
 
 # Run SocketIO app
