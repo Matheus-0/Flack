@@ -1,19 +1,20 @@
+import os
 from time import localtime, strftime
 
 from flask import flash, Flask, redirect, request, render_template, url_for
 from flask_login import current_user, LoginManager, login_user, logout_user
 from flask_socketio import join_room, leave_room, SocketIO
 
-from forms import *
-from models import *
+from forms import LoginForm, pbkdf2_sha256, RegistrationForm, User
+from models import SQLAlchemy
 
 # Setting up app
 app = Flask(__name__)
 
-app.secret_key = 'dev'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Setting up app and database
-app.config['SQLALCHEMY_DATABASE_URI'] = None
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -33,6 +34,7 @@ limit = 100
 
 # Setting up Flask's login
 login = LoginManager(app)
+
 login.init_app(app)
 
 
@@ -164,4 +166,4 @@ def add(context, room):
 
 # Run SocketIO app
 if __name__ == '__main__':
-    socket.run(app, debug=True)
+    app.run()
